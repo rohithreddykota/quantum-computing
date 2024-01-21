@@ -43,3 +43,9 @@ dotnet iqsharp --version
 dotnet tool install -g Microsoft.Quantum.IQSharp
 dotnet iqsharp install --user
 ```
+
+### Run Tests
+
+```bash
+dotnet test --filter T1_Test
+```

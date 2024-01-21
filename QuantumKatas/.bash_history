@@ -39,3 +39,23 @@ cd ..
 cd BasicGates/
 dotnet test --filter T101_StateFlip
 exit
+cd assignments/
+ls
+cd Module2_SingleQubitSystem/
+ls
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+exit
+cd assignments/Module2_SingleQubitSystem/
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+exit
+docker ps
+cd assignments/Module2_SingleQubitSystem/
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+exit
