@@ -105,6 +105,23 @@ namespace Quantum.SingleQubitSystems {
     // can be not deterministic, you will be given 10 attempts for each state |ψ⟩; you need to pass at least one attempt.
     // Please make sure that your solution passes the test in under 5 seconds.
     operation Task5 (statePrep : Qubit => Unit) : (Double, Double) {
-        return (0.0, 0.0);
+        mutable countZero = 0;
+        let numRepetitions = 10000;
+
+        for _ in 1..numRepetitions {
+            use q = Qubit() {
+                statePrep(q);
+                if (M(q) == Zero) {
+                    set countZero += 1;
+                }
+                Reset(q);
+            }
+        }
+
+        let alpha = Sqrt(IntAsDouble(countZero) / IntAsDouble(numRepetitions));
+        let beta = Sqrt(1.0 - alpha * alpha);
+
+        return (alpha, beta);
     }
+
 }
