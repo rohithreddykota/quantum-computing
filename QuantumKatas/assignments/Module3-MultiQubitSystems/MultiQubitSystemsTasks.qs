@@ -131,13 +131,13 @@ namespace Quantum.MultiQubitSystems {
     //         2 if they were in |S2⟩ state,
     //         3 if they were in |S3⟩ state.
     // The state of the qubits at the end of the operation does not matter.
-    operation Task7(qubits : Qubit[]) : Int {
+    operation Task7(qs : Qubit[]) : Int {
         // Initialize result array to hold measurement results
         mutable results = new Result[3];
 
         // Measure each qubit in the computational (Z) basis
         for i in 0..2 {
-            set results w/= i <- M(qubits[i]);
+            set results w/= i <- M(qs[i]);
         }
 
         // Convert the measurement results from Qubit[] to Int
@@ -168,8 +168,31 @@ namespace Quantum.MultiQubitSystems {
     //         3 if they were in |S3⟩ state.
     // The state of the qubits at the end of the operation does not matter.
     operation Task8 (qs : Qubit[]) : Int {
-        // Default return value in case of an unexpected result
-        return -1;
+        // Measure the qubits and store the results
+        let result0 = M(qs[0]);
+        let result1 = M(qs[1]);
+
+        // Convert the measurement results to integers (0 for Zero, 1 for One)
+        let measure0 = result0 == Zero ? 0 | 1;
+        let measure1 = result1 == Zero ? 0 | 1;
+
+        // Combine the measurement results into a single integer for easy comparison
+        let combinedResult = measure0 * 2 + measure1; // This creates a unique integer for each possible outcome (00, 01, 10, 11)
+
+        // Decision logic based on the combinedResult
+        if (combinedResult == 0) {
+            // Logic for determining if the state is |S0⟩, |S1⟩, |S2⟩, or |S3⟩ based on the outcome '00'
+        } elif (combinedResult == 1) {
+            // Logic for '01'
+        } elif (combinedResult == 2) {
+            // Logic for '10'
+        } else { // combinedResult == 3
+            // Logic for '11'
+        }
+
+        // Placeholder for returning the identified state after applying the correct logic
+        return -1; // Placeholder: replace this with the correct state identification based on the logic above
+    
     }
 
 }
