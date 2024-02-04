@@ -149,15 +149,10 @@ namespace Quantum.MultiQubitSystems {
         }
 
         // Return the state based on the measurement
-        if (measuredState == 0 || measuredState == 7) {
-            return 0; // |S0⟩ = (|000⟩ + |111⟩) / sqrt(2)
-        } elif (measuredState == 1 || measuredState == 6) {
-            return 1; // |S1⟩ = (|001⟩ + |110⟩) / sqrt(2)
-        } elif (measuredState == 2 || measuredState == 5) {
-            return 2; // |S2⟩ = (|010⟩ + |101⟩) / sqrt(2)
-        } else { // (measuredState == 4 || measuredState == 3)
-            return 3; // |S3⟩ = (|100⟩ + |011⟩) / sqrt(2)
-        }
+        return measuredState == 0 || measuredState == 7 ? 0 // |S0⟩ = (|000⟩ + |111⟩) / sqrt(2)
+        | measuredState == 1 || measuredState == 6 ? 1 // |S1⟩ = (|001⟩ + |110⟩) / sqrt(2)
+        | measuredState == 2 || measuredState == 5 ? 2 // |S2⟩ = (|010⟩ + |101⟩) / sqrt(2)
+        | 3; // |S3⟩ = (|100⟩ + |011⟩) / sqrt(2)
     }
 
 
