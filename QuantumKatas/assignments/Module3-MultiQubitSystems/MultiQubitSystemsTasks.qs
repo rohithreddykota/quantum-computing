@@ -131,17 +131,33 @@ namespace Quantum.MultiQubitSystems {
     //         2 if they were in |S2⟩ state,
     //         3 if they were in |S3⟩ state.
     // The state of the qubits at the end of the operation does not matter.
-    operation Task7 (qs : Qubit[]) : Int {
-        // Apply a Hadamard gate to each qubit to transform the basis
-        ApplyToEach(H, qs);
+    operation Task7(qubits : Qubit[]) : Int {
+        // Initialize result array to hold measurement results
+        mutable results = new Result[3];
+        
+        // Measure each qubit in the computational (Z) basis
+        for (i in 0..2) {
+            set results w/= i <- M(qubits[i]);
+        }
 
-        // Measure each qubit
-        let m0 = M(qs[0]) == Zero ? 0 | 1;
-        let m1 = M(qs[1]) == Zero ? 0 | 2;
-        let m2 = M(qs[2]) == Zero ? 0 | 4;
+        // Convert the measurement results from Qubit[] to Int
+        mutable measuredState = 0;
+        for (i in 0..Length(results)-1) {
+            if (results[i] == One) {
+                set measuredState += 1 <<< (Length(results) - 1 - i);
+            }
+        }
 
-        // Return the sum of the measurement results to determine the state
-        return m0 + m1 + m2;
+        // Return the state based on the measurement
+        if (measuredState == 0 || measuredState == 7) {
+            return 0; // |S0⟩ = (|000⟩ + |111⟩) / sqrt(2)
+        } elif (measuredState == 1 || measuredState == 6) {
+            return 1; // |S1⟩ = (|001⟩ + |110⟩) / sqrt(2)
+        } elif (measuredState == 2 || measuredState == 5) {
+            return 2; // |S2⟩ = (|010⟩ + |101⟩) / sqrt(2)
+        } else { // (measuredState == 4 || measuredState == 3)
+            return 3; // |S3⟩ = (|100⟩ + |011⟩) / sqrt(2)
+        }
     }
 
 
