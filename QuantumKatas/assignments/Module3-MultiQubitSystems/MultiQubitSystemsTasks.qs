@@ -134,25 +134,25 @@ namespace Quantum.MultiQubitSystems {
     operation Task7(qubits : Qubit[]) : Int {
         // Initialize result array to hold measurement results
         mutable results = new Result[3];
-        
+
         // Measure each qubit in the computational (Z) basis
-        for (i in 0..2) {
+        for i in 0..2 {
             set results w/= i <- M(qubits[i]);
         }
 
         // Convert the measurement results from Qubit[] to Int
         mutable measuredState = 0;
-        for (i in 0..Length(results)-1) {
+        for i in 0..Length(results)-1 {
             if (results[i] == One) {
                 set measuredState += 1 <<< (Length(results) - 1 - i);
             }
         }
 
         // Return the state based on the measurement
-        return measuredState == 0 || measuredState == 7 ? 0 // |S0⟩ = (|000⟩ + |111⟩) / sqrt(2)
-        | measuredState == 1 || measuredState == 6 ? 1 // |S1⟩ = (|001⟩ + |110⟩) / sqrt(2)
-        | measuredState == 2 || measuredState == 5 ? 2 // |S2⟩ = (|010⟩ + |101⟩) / sqrt(2)
-        | 3; // |S3⟩ = (|100⟩ + |011⟩) / sqrt(2)
+        return measuredState == 0 or measuredState == 7 ? 0 // |S0⟩ = (|000⟩ + |111⟩) / sqrt(2)
+            | measuredState == 1 or measuredState == 6 ? 1 // |S1⟩ = (|001⟩ + |110⟩) / sqrt(2)
+            | measuredState == 2 or measuredState == 5 ? 2 // |S2⟩ = (|010⟩ + |101⟩) / sqrt(2)
+            | 3; // |S3⟩ = (|100⟩ + |011⟩) / sqrt(2)
     }
 
 
