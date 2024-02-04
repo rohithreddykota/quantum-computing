@@ -59,3 +59,81 @@ dotnet test --filter T1_Test
 dotnet test --filter T1_Test
 dotnet test --filter T1_Test
 exit
+cd assignments/
+ls
+cd Module2_SingleQubitSystem/
+dotnet test --filter T1_Test
+dotnet test
+dotnet test --filter T2_Test
+dotnet test --filter T2_Test
+dotnet test --filter T2_Test
+operation Task5 (statePrep : Qubit => Unit) : (Double, Double) {
+    mutable countZero = 0;
+    let numRepetitions = 1000;
+    for (_ in 1..numRepetitions) {
+        using (q = Qubit()) {
+            statePrep(q);
+            if (M(q) == Zero) {
+                set countZero += 1;
+            }
+            Reset(q);
+        }
+    }
+    let alpha = Sqrt(IntAsDouble(countZero) / numRepetitions);
+    let beta = Sqrt(1.0 - alpha * alpha);
+    return (alpha, beta);
+dotnet test 
+ls
+dotnet test 
+dotnet test --filter T4_Test
+dotnet test --filter T3_Test
+ls
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+dotnet test --filter T2_Test
+dotnet test
+dotnet test
+dotnet test --filter T3_Test
+dotnet test --filter T4_Test
+gsutil ls gs://ws1-digitalturbine.rilldata.com/uploads/ignite_events_hourly-backfill/
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+dotnet test --filter T1_test
+dotnet test --filter T1_test
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+dotnet test --filter T1_Test
+dotnet test --filter T3_Test
+dotnet test --filter T3_Test
+dotnet test --filter T2_Test
+dotnet test --filter T2_Test
+dotnet test --filter T2_Test
+dotnet test --filter T2_Test
+dotnet test --filter T2_Test
+dotnet test --filter T2_Test
+dotnet test --filter T2_Test
+dotnet test --filter T2_Test
+dotnet test --filter T2_Test
+dotnet test --filter T1_Test
+dotnet test --filter T3_Test
+dotnet test --filter T4_Test
+dotnet test --filter T4_Test
+dotnet test --filter T4_Test
+dotnet test 
+dotnet test 
+dotnet test 
+dotnet test 
+dotnet test 
+dotnet test 
+dotnet test 
+dotnet test 
+dotnet test 
+dotnet test 
+dotnet test 
+dotnet test 
+dotnet test 
+dotnet test 
+dotnet test 
+exit
