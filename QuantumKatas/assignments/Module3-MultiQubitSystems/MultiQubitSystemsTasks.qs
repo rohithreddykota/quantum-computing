@@ -45,15 +45,19 @@ namespace Quantum.MultiQubitSystems {
     // Task 2. Prepare (|0101..⟩ + |1010..⟩) / sqrt(2) (1 point).
     // Input: N qubits in |0...0⟩ state.
     // Goal: create the following state on this qubit: (|0101..⟩ + |1010..⟩) / sqrt(2).
-    operation Task2 (qs : Qubit[]) : Unit {
-        let N = Length(qs);
-        for i in 0 .. N - 1 {
-            H(qs[i]);
-            if (i % 2 == 1) {
-                Z(qs[i]);
+    operation Task2 (qubits : Qubit[]) : Unit {
+            let N = Length(qubits);
+            // Apply a Hadamard gate to first qubit for a superposition.
+            H(qubits[0]);
+            // Apply X gates to flip the states of the qubits in a pattern "1010..." for the second part of the superposition.
+            for (i in 1..2..N-1) {
+                X(qubits[i]);
+            }
+            // Entangle each qubit with the first qubit to ensure the superposition of "0101..." and "1010..."
+            for (i in 0..N-2) {
+                CNOT(qubits[0], qubits[i + 1]);
             }
         }
-    }
 
 
 
