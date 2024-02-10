@@ -137,3 +137,7 @@ dotnet test
 dotnet test 
 dotnet test 
 exit
+cd assignments/
+cd Module3-MultiQubitSystems/
+dotnet test
+exit
