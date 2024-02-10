@@ -87,10 +87,10 @@ namespace Quantum.CommunicationAlgorithms {
     //       i.e., will transform |+, 0⟩ → |+, +⟩ and |-, 0⟩ → |-, -⟩.
     // Do not use measurements.
     operation Task3 (data : Qubit, scratch : Qubit) : Unit is Adj {
-        // Apply a Hadamard gate to the scratch qubit.
-        H(scratch);
-        // Apply a controlled-NOT gate with the data qubit as control and the scratch qubit as target.
+        H(data);
         CNOT(data, scratch);
+        H(data);
+        H(scratch);
     }
 
 
