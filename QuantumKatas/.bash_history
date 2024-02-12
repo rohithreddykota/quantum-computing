@@ -141,3 +141,8 @@ cd assignments/
 cd Module3-MultiQubitSystems/
 dotnet test
 exit
+cd assignments/
+cd Module4-CommunicationAlgorithms/
+ls
+docker run -it --name katas-container -p 8888:8888 katas /bin/bash
+exit

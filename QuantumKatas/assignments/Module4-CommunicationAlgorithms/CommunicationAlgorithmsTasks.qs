@@ -100,10 +100,10 @@ namespace Quantum.CommunicationAlgorithms {
     //       i.e., will transform |+, +⟩ → |+, 0⟩ and |-, -⟩ → |-, 0⟩.
     // Do not use measurements.
     operation Task4 (qs : Qubit[]) : Unit is Adj {
-        // Apply a CNOT gate with the first qubit as control and the second qubit as target.
+        H(qs[1]);
+        H(qs[0]);
         CNOT(qs[0], qs[1]);
-        // Apply an X gate to the second qubit.
-        X(qs[1]);
+        H(qs[0]);
     }
 
 
