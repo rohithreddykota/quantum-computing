@@ -146,3 +146,14 @@ cd Module4-CommunicationAlgorithms/
 ls
 docker run -it --name katas-container -p 8888:8888 katas /bin/bash
 exit
+cd assignments/
+cd Module4-CommunicationAlgorithms/
+dotnet test
+dotnet test
+dotnet test
+dotnet test
+dotnet test
+dotnet test
+git add .
+git status
+exit
