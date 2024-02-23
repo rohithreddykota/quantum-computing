@@ -45,10 +45,27 @@ namespace Quantum.ReversibleComputing {
     //       Leave the query register in the same state it started in.
     // Example: 
     //       For N = 4, the oracle should mark the state 0110.
-    operation Task1 (queryRegister : Qubit[], target : Qubit) : Unit is Adj {
-        // Note that your implementation has to be adjointable.
-        // ...
+    operation Task1(queryRegister : Qubit[], target : Qubit) : Unit is Adj {
+
+        // Iterate through pairs of qubits in the query register:
+        for (i in 0..Length(queryRegister) / 2 - 1) {
+
+            // Apply a controlled-Z (CZ) gate between the first qubit of the pair and the target qubit:
+            CZ(queryRegister[2 * i], target);
+
+            // Apply a controlled-NOT (CNOT) gate, controlled by the second qubit of the pair and targeting the first qubit:
+            CNOT(queryRegister[2 * i + 1], queryRegister[2 * i]);
+
+            // Apply another CZ gate between the second qubit of the pair and the target qubit:
+            CZ(queryRegister[2 * i + 1], target);
+        }
+
+        // If there's an odd number of qubits, apply a final CZ gate:
+        if (Length(queryRegister) % 2 == 1) {
+            CZ(queryRegister[Length(queryRegister) - 1], target);
+        }
     }
+
 
 
     // Task 2. Peres gate (1 point).
@@ -64,8 +81,9 @@ namespace Quantum.ReversibleComputing {
     //       |1 1 0⟩ → |1 0 1⟩
     //       |1 1 1⟩ → |1 0 0⟩
     operation Task2 (qs : Qubit[]) : Unit is Adj {
-        // Note that your implementation has to be adjointable.
-        // ...
+        CNOT(qs[0], qs[2]);
+        CNOT(qs[0], qs[1]);
+        CCNOT(qs[0], qs[1], qs[2]);
     }
 
 
@@ -85,8 +103,12 @@ namespace Quantum.ReversibleComputing {
     // Example of the oracle effect: 
     //       For N = 4, the oracle should mark the states 0100, 0101, 0110, 0111, and 0001.
     operation Task3 (queryRegister : Qubit[], target : Qubit) : Unit is Adj {
-        // Note that your implementation has to be adjointable.
-        // ...
+        let N = Length(queryRegister);
+        for (i in 0 .. N - 1) {
+            if (i % 2 == 0) {
+                CNOT(queryRegister[i], target);
+            }
+        }
     }
 
 
