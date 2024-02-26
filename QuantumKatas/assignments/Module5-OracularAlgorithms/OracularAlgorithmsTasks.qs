@@ -37,8 +37,7 @@ namespace Quantum.OracularAlgorithms {
     // Goal: implement a unitary that transforms each basis state |x⟩ into state (-1)^f(x) |x⟩.
     // You are not allowed to allocate extra qubits.
     operation Task1 (x : Qubit, F : Int) : Unit is Adj + Ctl {
-        if (F == 0) {
-        } elif (F == 1) {
+        if (F == 1) {
             R(PauliI, 2.0 * PI(), x);
         } elif (F == 2) {
             Z(x);
@@ -56,16 +55,12 @@ namespace Quantum.OracularAlgorithms {
     //       where f(x₁, x₂) = 1 if x₁ = x₂ and 0 otherwise.
     // You are not allowed to allocate extra qubits.
     operation Task2 (x : Qubit[]) : Unit is Adj + Ctl {
-        // Apply Hadamard gates to both qubits to create superpositions
-        H(x[0]);
-        H(x[1]);
-
-        // Apply a CZ gate to introduce a phase flip if both qubits are in the |1⟩ state
         Controlled Z([x[0]], x[1]);
-
-        // Apply Hadamard gates again to both qubits
-        H(x[0]);
-        H(x[1]);
+        X(x[0]);
+        X(x[1]);
+        Controlled Z([x[0]], x[1]);
+        X(x[0]);
+        X(x[1]);
     }
 
 
@@ -78,13 +73,10 @@ namespace Quantum.OracularAlgorithms {
     //       (i.e., the function implemented by the oracle used in Bernstein-Vazirani algorithm).
     // You are not allowed to allocate extra qubits.
     operation Task3 (x : Qubit[], s : Bool[]) : Unit is Adj + Ctl {
-        if (Length(x) != Length(s)) {
-            fail "The length of the qubit array and the bit vector must be the same.";
-        }
-
-        for i in 0..Length(x) - 1 {
+        let n = Length(x);
+        for i in 0..n - 1 {
             if (s[i]) {
-                Z(x[i]); // Apply a phase flip if the corresponding bit in the vector is 1 (true)
+                Z(x[i]);
             }
         }
     }
@@ -95,9 +87,26 @@ namespace Quantum.OracularAlgorithms {
     // Goal: implement a unitary that transforms each basis state |x₁x₂...xₙ⟩ into state (-1)^f(x₁, x₂, ..., xₙ) |x₁x₂...xₙ⟩,
     //       where f(x₁, x₂, ..., xₙ) = 1 if the number of zeros among xᵢ is even, and 0 otherwise.
     // You are not allowed to allocate extra qubits.
-    operation Task4(x : Qubit[]) : Unit is Adj + Ctl {
-        // ...
+    operation Task4 (x : Qubit[]) : Unit is Adj + Ctl {
+        let N = Length(x);
+        for (i in 0..N-1) {
+            X(x[i]);
+        }
+
+        for (i in 0..N-2) {
+            CNOT(x[i], x[i+1]);
+        }
+
+        Z(x[N-1]);
+
+        for (i in N-2..-1..0) {
+            CNOT(x[i], x[i+1]);
+        }
+        for (i in 0..N-1) {
+            X(x[i]);
+        }
     }
+
 
     // Task 5. "Alternating bit stings" phase oracle (3 points)
     // Input: N ≥ 2 qubits in an arbitrary state (function input)
@@ -106,25 +115,14 @@ namespace Quantum.OracularAlgorithms {
     //       (This means that the only two bit strings that should be marked with the -1 phase are 0101... and 1010...)
     // You are not allowed to allocate extra qubits.
     operation Task5 (x : Qubit[]) : Unit is Adj + Ctl {
-        let n = Length(x);
-
-        // No need to prepare qubits with X gates initially.
-        // Instead, we need to apply a phase only when we detect an alternating pattern.
-        // This requires checking pairs of qubits without modifying their state.
-
-        // Apply CZ gates to mark the alternating patterns with a -1 phase.
-        // We use a series of CNOT and CZ gates to do this without extra qubits.
-        for (i in 0..n-2) {
-            // Flip the next qubit if it's the same as the current, which prepares for a CZ to apply the phase conditionally
-            CNOT(x[i], x[i+1]);
-            // Apply CZ between the current qubit and the next if they are now in a pattern 01 or 10, which will be after CNOT if they were initially alternating
-            Controlled Z([x[i]], x[i+1]);
-            // Restore the next qubit to its original state
-            CNOT(x[i], x[i+1]);
-        }
-
-        // For the very last pair, ensure we handle the edge case of the pattern wrapping around if necessary.
-        // Since the task doesn't specify wrapping behavior, we'll leave it as is for simplicity.
+      let n = Length(x);
+      for i in 1 .. n - 1 {
+         CNOT(x[i], x[i - 1]);
+      }
+      Controlled Z(x[0 .. n - 3], x[n - 2]);
+      for i in n - 1 .. -1 .. 1 {
+         CNOT(x[i], x[i - 1]);
+      }
     }
 
 }

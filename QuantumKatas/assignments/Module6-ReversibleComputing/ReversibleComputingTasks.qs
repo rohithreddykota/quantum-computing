@@ -34,6 +34,16 @@ namespace Quantum.ReversibleComputing {
     // for details on how to specify variants explicitly.
     
 
+    function BuildPattern011(n : Int) : Bool[] {
+        mutable pattern = new Bool[n];
+        for i in 0..n-1 {
+            if (i % 3 == 1 || i % 3 == 2) {
+                set pattern w/= i <- true;
+            }
+        }
+        return pattern;
+    }
+
     // Task 1. |011011...⟩ marking oracle (1 point).
     // Inputs:
     //      1) N qubits in an arbitrary state |x⟩ (input/query register)
@@ -46,26 +56,10 @@ namespace Quantum.ReversibleComputing {
     // Example: 
     //       For N = 4, the oracle should mark the state 0110.
     operation Task1(queryRegister : Qubit[], target : Qubit) : Unit is Adj {
-
-        // Iterate through pairs of qubits in the query register:
-        for (i in 0..Length(queryRegister) / 2 - 1) {
-
-            // Apply a controlled-Z (CZ) gate between the first qubit of the pair and the target qubit:
-            CZ(queryRegister[2 * i], target);
-
-            // Apply a controlled-NOT (CNOT) gate, controlled by the second qubit of the pair and targeting the first qubit:
-            CNOT(queryRegister[2 * i + 1], queryRegister[2 * i]);
-
-            // Apply another CZ gate between the second qubit of the pair and the target qubit:
-            CZ(queryRegister[2 * i + 1], target);
-        }
-
-        // If there's an odd number of qubits, apply a final CZ gate:
-        if (Length(queryRegister) % 2 == 1) {
-            CZ(queryRegister[Length(queryRegister) - 1], target);
-        }
+        let pattern = BuildPattern011(Length(queryRegister));
+        let Pattern011 = ControlledOnBitString(pattern, X);
+        Pattern011(queryRegister, target);
     }
-
 
 
     // Task 2. Peres gate (1 point).
@@ -86,7 +80,6 @@ namespace Quantum.ReversibleComputing {
         CCNOT(qs[0], qs[1], qs[2]);
     }
 
-
     // Task 3. "Parity of bit length of the input" oracle (2 points).
     // Inputs:
     //      1) N qubits in an arbitrary state |x⟩ (input/query register)
@@ -103,14 +96,31 @@ namespace Quantum.ReversibleComputing {
     // Example of the oracle effect: 
     //       For N = 4, the oracle should mark the states 0100, 0101, 0110, 0111, and 0001.
     operation Task3 (queryRegister : Qubit[], target : Qubit) : Unit is Adj {
-        let N = Length(queryRegister);
-        for (i in 0 .. N - 1) {
-            if (i % 2 == 0) {
-                CNOT(queryRegister[i], target);
-            }
-        }
+        
     }
 
+
+    function GetQubitPattern(queryRegister:Qubit[],pattern : Int[]) : Qubit[] {
+        mutable queryRegisterSubList = [];
+
+        for i in 0..Length(queryRegister) - 1 {
+            if (pattern[i] != -1) {
+                set queryRegisterSubList = queryRegisterSubList + [queryRegister[i]];
+            }
+        }
+        return queryRegisterSubList;
+    }
+    function GetPatternMatcher(queryRegister:Qubit[],pattern : Int[]) : Bool[] {
+        mutable patternSubList =[];
+
+        for i in 0..Length(queryRegister) - 1 {
+            if (pattern[i] != -1) {
+                set patternSubList = patternSubList + [pattern[i] == 1];
+            }
+        }
+        return patternSubList;
+        
+    }
 
     // Task 4. Regexp matching marking oracle (3 points).
     // Inputs:
@@ -135,7 +145,10 @@ namespace Quantum.ReversibleComputing {
     // https://github.com/tcNickolas/q-sharp-pocket-guide-samples/blob/main/samples/chapter%205/manual-adjoint-unitary/Code.qs
     // for an example of defining adjoint of an operation manually.
     operation Task4 (queryRegister : Qubit[], target : Qubit, pattern : Int[]) : Unit is Adj {
-        // Note that your implementation has to be adjointable.
-        // ...
+
+        let QubitChecker = GetQubitPattern(queryRegister,pattern);
+        let patternChecker = GetPatternMatcher(queryRegister,pattern);
+
+        ApplyControlledOnBitString(patternChecker, X, QubitChecker, target);
     }
 }

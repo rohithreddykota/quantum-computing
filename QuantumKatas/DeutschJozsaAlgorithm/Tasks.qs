@@ -306,4 +306,3 @@ namespace Quantum.Kata.DeutschJozsaAlgorithm {
     }
     
 }
-
