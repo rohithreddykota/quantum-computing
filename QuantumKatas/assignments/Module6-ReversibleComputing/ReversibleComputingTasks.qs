@@ -96,7 +96,24 @@ namespace Quantum.ReversibleComputing {
     // Example of the oracle effect: 
     //       For N = 4, the oracle should mark the states 0100, 0101, 0110, 0111, and 0001.
     operation Task3 (queryRegister : Qubit[], target : Qubit) : Unit is Adj {
+        let n = Length(queryRegister);
+
+        for i in 0 .. (n-1) {
+            for j in 0 .. (i) {
+                X(queryRegister[j]);
+            }
         
+            Controlled X(queryRegister[0..i], target);
+            
+            for j in 0 .. (i) {
+                X(queryRegister[j]);
+            }
+        }
+
+        if (n % 2 == 1){
+            X(target);
+        } 
+
     }
 
 
