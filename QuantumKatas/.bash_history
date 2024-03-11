@@ -157,3 +157,15 @@ dotnet test
 git add .
 git status
 exit
+nohup jupyter notebook --ip=0.0.0.0 --no-browser > jupyter.out 2>&1 &
+tail -f jupyter.out
+dotnet iqsharp --version
+dotnet qsharp --version
+pip freeze | grep qsharp
+pip install qsharp-jupyterlab==1.1.3
+kill -9 12
+nohup jupyter notebook --ip=0.0.0.0 --no-browser > jupyter.out 2>&1 &
+nohup jupyter notebook --ip=0.0.0.0 --no-browser > jupyter.out 2>&1 &
+tail -f jupyter.out 
+exit
+exit
