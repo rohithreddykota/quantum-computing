@@ -55,15 +55,12 @@ namespace Quantum.UnitaryGates {
     //       The iSWAP gate is described on page 95 of Williams chapter 2 (page 45 of the pdf), equation 2.90.
     operation Task2 (qs : Qubit[]) : Unit is Adj + Ctl {
         // The iSWAP gate is a sequence of Hadamard, CNOT, and S gates.
-        H(qs[0]); // Hadamard gate
-        H(qs[1]); // Hadamard gate
-        CNOT(qs[0], qs[1]); // CNOT gate
-        S(qs[0]); // S gate
-        CNOT(qs[1], qs[0]); // CNOT gate
-        S(qs[1]); // S gate
-        CNOT(qs[0], qs[1]); // CNOT gate
-        H(qs[0]); // Hadamard gate
-        H(qs[1]); // Hadamard gate
+        S(qs[0]);
+        S(qs[1]);
+        H(qs[0]);
+        CNOT(qs[0], qs[1]);
+        CNOT(qs[1], qs[0]);
+        H(qs[1]);
     }
 
 
@@ -73,21 +70,9 @@ namespace Quantum.UnitaryGates {
     //      2) three Double numbers alpha, theta, and phi.
     // Goal: implement the Barenco gate with these parameters acting on these qubits.
     //       The Barenco gate is described on page 93 of Williams chapter 2 (page 43 of the pdf), equation 2.89.
-    operation Task3(qs: Qubit[], alpha: Double, theta: Double, phi: Double): Unit is Adj + Ctl {
-        R1(alpha, qs[0]);
-        R1(alpha, qs[1]);
+    operation Task3 (qs : Qubit[], alpha : Double, theta : Double, phi : Double) : Unit is Adj + Ctl {
 
-        // Controlled rotation on the target qubit.
-        // Here we use Ry for simplicity, representing a rotation by theta around the Y axis.
-        // Adjust this based on the specific details of the Barenco gate as needed.
-        Controlled Ry([qs[0]], (theta, qs[1]));
-
-        // Apply phase rotation after controlled rotation, if necessary.
-        // This might represent a specific detail of the Barenco gate's implementation.
-        // Phi is applied through an Rz gate for a Z-axis rotation.
-        Controlled Rz([qs[0]], (phi, qs[1]));
     }
-
 
 
     // Task 4.  Implement the Deutsch gate (3 points).
