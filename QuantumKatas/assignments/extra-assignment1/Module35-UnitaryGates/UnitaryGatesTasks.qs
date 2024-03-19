@@ -23,7 +23,7 @@ namespace Quantum.UnitaryGates {
     // (https://iontrap.umd.edu/wp-content/uploads/2016/01/Quantum-Gates-c2.pdf).
     // It discusses single- and multi-qubit gates with complex coefficients in detail,
     // including the decompositions of gates into sequences of other gates which is the topic of this module.
-    
+    // 
     // In all tasks, your gate implementations should have adjont and controlled variants.
     // As long as you only use classical arithmetic and primitive Q# gates,
     // the compiler will be able to generate those automatically based on the "is Adj + Ctl" suffix in the operation signature.
@@ -43,9 +43,9 @@ namespace Quantum.UnitaryGates {
     //       The SQRT(NOT) gate is described on page 72 of Williams chapter 2 (page 22 of the pdf), equation 2.10.
     operation Task1 (q : Qubit) : Unit is Adj + Ctl {
         // The SQRT(NOT) gate is a sequence of Hadamard and S gates.
-        H(q); // Hadamard gate
-        S(q); // S gate
-        H(q); // Hadamard gate
+        H(q);
+        S(q);
+        H(q);
     }
 
 
@@ -59,7 +59,9 @@ namespace Quantum.UnitaryGates {
         S(qs[1]);
         H(qs[0]);
         CNOT(qs[0], qs[1]);
-        CNOT(qs[1], qs[0]);
+        SWAP(qs[0], qs[1]);
+        CNOT(qs[0], qs[1]);
+        SWAP(qs[0], qs[1]);
         H(qs[1]);
     }
 
@@ -71,9 +73,15 @@ namespace Quantum.UnitaryGates {
     // Goal: implement the Barenco gate with these parameters acting on these qubits.
     //       The Barenco gate is described on page 93 of Williams chapter 2 (page 43 of the pdf), equation 2.89.
     operation Task3 (qs : Qubit[], alpha : Double, theta : Double, phi : Double) : Unit is Adj + Ctl {
-
+        let twice_theta = 2.0 * theta;
+        Controlled Rz([qs[0]], (alpha, qs[1]));
+        Controlled Ry([qs[0]], (twice_theta, qs[1]));
+        Rz(-phi, qs[1]);
+        Controlled Ry([qs[0]], (-twice_theta, qs[1]));
+        Rz(phi, qs[1]);
+        Rz(alpha, qs[1]);
+        CNOT(qs[0], qs[1]);
     }
-
 
     // Task 4.  Implement the Deutsch gate (3 points).
     // Inputs:
@@ -82,6 +90,11 @@ namespace Quantum.UnitaryGates {
     // Goal: implement the Deutsch gate with these parameters acting on these qubits.
     //       The Deutsch gate is described on page 93 of Williams chapter 2 (page 43 of the pdf), equation 2.88.
     operation Task4 (qs : Qubit[], theta : Double) : Unit is Adj + Ctl {
-        // ...
+        let twice_theta = 2.0 * theta;
+        Controlled S([qs[0], qs[1]], qs[2]);
+        Controlled Z([qs[0], qs[1]], qs[2]);
+        Controlled Ry([qs[0], qs[1]], (twice_theta, qs[2]));
+        Controlled Z([qs[0], qs[1]], qs[2]);
+        Controlled S([qs[0], qs[1]], qs[2]);
     }
 }

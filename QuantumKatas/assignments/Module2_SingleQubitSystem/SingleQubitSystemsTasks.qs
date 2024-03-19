@@ -38,7 +38,7 @@ namespace Quantum.SingleQubitSystems {
         Z(q);
     }
 
-    
+
     // Task 2. Prepare states conditionally (2 points)
     // Inputs:
     //    1) a qubit in |0⟩ state.
@@ -58,9 +58,6 @@ namespace Quantum.SingleQubitSystems {
             Z(q); // Apply a Z gate to flip the phase of the |1⟩ component
         }
     }
-
-
-
 
 
     //////////////////////////////////////////////////////////////////
