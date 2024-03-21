@@ -38,8 +38,10 @@ namespace Quantum.QPEQFT {
     // For example, for n = 2 N = 4, and the goal state is 
     //       1/2 (|0⟩ + i|1⟩ - |2⟩ - i|3⟩).
     operation Task1 (qs : Qubit[]) : Unit is Adj {
-        // ...
+        let bitsBE = IntAsBoolArray(1, Length(qs));
+        ApplyPauliFromBitString(PauliX, true, bitsBE, qs);
     }
+
 
 
     // Task 2. Prepare superposition of odd states using QFT (1 point).
@@ -51,7 +53,8 @@ namespace Quantum.QPEQFT {
     // Note that this state is very easy to prepare directly; please don't do that followed by a call to Adjoint QFTLE, 
     // but think what state is converted into this state by QFT.
     operation Task2 (qs : Qubit[]) : Unit is Adj {
-        // ...
+        X(qs[0]);
+        H(qs[0]);
     }
 
 
@@ -62,7 +65,9 @@ namespace Quantum.QPEQFT {
     // For example, for n = 2 N = 4, and the goal state is 
     //       1/sqrt(2) (cos(0)|0⟩ + cos(π/2)|1⟩ + cos(π)|2⟩ + cos(3π/2)|3⟩) = 1/sqrt(2) (|0⟩ - |2⟩).
     operation Task3 (qs : Qubit[]) : Unit is Adj {
-        // ...
+        X(qs[0]);
+        H(qs[0]);
+        H(qs[1]);
     }
 
 
@@ -74,7 +79,12 @@ namespace Quantum.QPEQFT {
     //       The eigenstate |ψ₀⟩ (prepared for "state" = 0) should be the one with eigenvalue -1,
     //       |ψ₁⟩ (prepared for "state" = 1) - the one with eigenvalue 1.
     operation Task4 (q : Qubit, state : Int) : Unit is Adj {
-        // ...
+        if (state == 1) {
+            H(q);
+        } else {
+            X(q);
+            H(q);
+        }
     }
 
 
@@ -94,7 +104,12 @@ namespace Quantum.QPEQFT {
     operation Task5 (U : (Qubit => Unit is Adj+Ctl), 
                      powerRegister : Qubit[], 
                      target : Qubit) : Unit is Adj {
-        // ...
+        let n = Length(powerRegister);
+        for (i in 0 .. n - 1) {
+            if (BoolAsInt(powerRegister[i]) == 1) {
+                (U^IntAsDouble(i, n))(target);
+            }
+        }
     }
 
 
@@ -111,7 +126,21 @@ namespace Quantum.QPEQFT {
     //
     // The test will be executed 100 times for each value of φ.
     function Task6 (phase : Double) : ((Qubit => Unit is Adj+Ctl), (Qubit => Unit is Adj)) {
-        // ...
-        return (I, I);
+        // The following code is a simple example of how to implement the task.
+        // You can use it as a starting point for your solution.
+        // The example implements the case when φ = 0.5.
+        // You need to implement a solution for an arbitrary φ.
+        // The example is not a valid solution for other values of φ.
+        // The example is not optimized for the minimal number of gates.
+        // The example is not tested for the precision requirements of the task.
+
+        // The unitary U is a rotation around the Z axis by 2πφ.
+        // The eigenstate |ψ⟩ is |+⟩ = (|0⟩ + |1⟩) / sqrt(2).
+        // The eigenvalue is exp(2πiφ).
+        // The phase gate P is the X gate.
+
+        // The example solution for φ = 0.5.
+        // return (R1(2.0 * PI() * phase), X);
+        return (R1(2.0 * PI() * phase), X);
     }
 }

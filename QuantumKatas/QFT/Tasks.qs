@@ -38,7 +38,7 @@ namespace Quantum.Kata.QFT {
     //        1/sqrt(2) ((x₀ + x₁)|0⟩ + (x₀ - x₁)|1⟩).
     // In other words, transform a basis state |j⟩ into a state 1/sqrt(2) (|0⟩ + exp(2πi·j/2)|1⟩).
     operation OneQubitQFT (q : Qubit) : Unit is Adj+Ctl {
-        // ...
+        H(q);
     }
 
 
