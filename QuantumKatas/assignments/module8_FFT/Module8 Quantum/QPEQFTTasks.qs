@@ -87,7 +87,8 @@ namespace Quantum.QPEQFT {
         if (state == 0) {
             X(q); 
         }
-        Ry(PI() / 4.0, q);
+        let theta = PI() / 4.0;
+        Ry(theta, q);
     }
 
 
