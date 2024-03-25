@@ -84,11 +84,12 @@ namespace Quantum.QPEQFT {
     //       The eigenstate |ψ₀⟩ (prepared for "state" = 0) should be the one with eigenvalue -1,
     //       |ψ₁⟩ (prepared for "state" = 1) - the one with eigenvalue 1.
     operation Task4 (q : Qubit, state : Int) : Unit is Adj {
-        if (state == 1) {
-            H(q);
+        let theta = PI() / 4.0;
+        if (state == 0) {
+            X(q); 
+            Ry(theta, q);
         } else {
-            X(q);
-            H(q);
+            Ry(theta, q);
         }
     }
 
