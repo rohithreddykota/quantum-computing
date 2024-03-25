@@ -88,7 +88,7 @@ namespace Quantum.QPEQFT {
             X(q); 
         }
         let theta = PI() / 4.0;
-        Ry(theta, q);
+        R(PauliY, theta, q);
     }
 
 
@@ -110,9 +110,11 @@ namespace Quantum.QPEQFT {
                     target : Qubit) : Unit is Adj {
         let length = Length(powerRegister);
         for i in 0..length - 1 {
-            for _ in 1..1 <<< i {
+            let shifted = 1 <<< i;
+            for _ in 1..shifted {
                 Controlled U([powerRegister[i]], target);
             }
+            
         }
     }
 
@@ -131,6 +133,6 @@ namespace Quantum.QPEQFT {
     // The test will be executed 100 times for each value of φ.
     function Task6 (phase : Double) : ((Qubit => Unit is Adj+Ctl), (Qubit => Unit is Adj)) {
         // ...
-        return (I, I);
+        return (I, I);  
     }
 }
