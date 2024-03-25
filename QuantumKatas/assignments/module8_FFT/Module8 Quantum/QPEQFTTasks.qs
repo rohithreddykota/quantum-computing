@@ -114,7 +114,6 @@ namespace Quantum.QPEQFT {
             for _ in 1..shifted {
                 Controlled U([powerRegister[i]], target);
             }
-            
         }
     }
 
