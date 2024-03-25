@@ -38,8 +38,8 @@ namespace Quantum.QPEQFT {
     // For example, for n = 2 N = 4, and the goal state is 
     //       1/2 (|0⟩ + i|1⟩ - |2⟩ - i|3⟩).
     operation Task1 (qs : Qubit[]) : Unit is Adj {
-        let bitsBE = IntAsBoolArray(1, Length(qs));
-        ApplyPauliFromBitString(PauliX, true, bitsBE, qs);
+        let boolArr = IntAsBoolArray(1, Length(qs));
+        ApplyPauliFromBitString(PauliX, true, boolArr, qs);
     }
 
 
@@ -53,9 +53,11 @@ namespace Quantum.QPEQFT {
     // Note that this state is very easy to prepare directly; please don't do that followed by a call to Adjoint QFTLE, 
     // but think what state is converted into this state by QFT.
     operation Task2 (qs : Qubit[]) : Unit is Adj {
-        let n = Length(qs);
-        X(qs[n-1]);
-        H(qs[n-1]);
+        let arrLength = Length(qs);
+        let tail = arrLength - 1;
+        let q = qs[tail];
+        X(q);
+        H(q);
     }
 
 
@@ -67,15 +69,10 @@ namespace Quantum.QPEQFT {
     //       1/sqrt(2) (cos(0)|0⟩ + cos(π/2)|1⟩ + cos(π)|2⟩ + cos(3π/2)|3⟩) = 1/sqrt(2) (|0⟩ - |2⟩).
     operation Task3 (qs : Qubit[]) : Unit is Adj {
         let n = Length(qs);
-        // Prepare a superposition of all states by applying a Hadamard gate to each qubit
-        for i in 0..n-1 {
+        for i in 0..n - 1 {
             H(qs[i]);
         }
-        // Apply a -Z gate to the second half of the states to introduce negative phase
-        // This corresponds to the negative cosine values for k >= N/2
-        X(qs[n-1]);
-        Z(qs[n-1]);
-        X(qs[n-1]);
+        Z(qs[n - 1]);
     }
 
 
@@ -112,10 +109,9 @@ namespace Quantum.QPEQFT {
     operation Task5(U : (Qubit => Unit is Adj+Ctl), 
                     powerRegister : Qubit[], 
                     target : Qubit) : Unit is Adj {
-        for (i in 0..Length(powerRegister) - 1) {
-            // The ith qubit controls5 the application of U^(2^i) to the target.
-            for (j in 1..(1 <<< i)) {
-                // Apply Controlled U, using powerRegister[i] as the control.
+        let length = Length(powerRegister);
+        for i in 0..length - 1 {
+            for _ in 1..1 <<< i {
                 Controlled U([powerRegister[i]], target);
             }
         }
