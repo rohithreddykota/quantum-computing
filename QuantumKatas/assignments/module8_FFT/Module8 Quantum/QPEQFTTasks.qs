@@ -53,8 +53,9 @@ namespace Quantum.QPEQFT {
     // Note that this state is very easy to prepare directly; please don't do that followed by a call to Adjoint QFTLE, 
     // but think what state is converted into this state by QFT.
     operation Task2 (qs : Qubit[]) : Unit is Adj {
-        X(qs[0]);
-        H(qs[0]);
+        let n = Length(qs);
+        X(qs[n-1]);
+        H(qs[n-1]);
     }
 
 
@@ -65,9 +66,16 @@ namespace Quantum.QPEQFT {
     // For example, for n = 2 N = 4, and the goal state is 
     //       1/sqrt(2) (cos(0)|0⟩ + cos(π/2)|1⟩ + cos(π)|2⟩ + cos(3π/2)|3⟩) = 1/sqrt(2) (|0⟩ - |2⟩).
     operation Task3 (qs : Qubit[]) : Unit is Adj {
-        X(qs[0]);
-        H(qs[0]);
-        H(qs[1]);
+        let n = Length(qs);
+        // Prepare a superposition of all states by applying a Hadamard gate to each qubit
+        for i in 0..n-1 {
+            H(qs[i]);
+        }
+        // Apply a -Z gate to the second half of the states to introduce negative phase
+        // This corresponds to the negative cosine values for k >= N/2
+        X(qs[n-1]);
+        Z(qs[n-1]);
+        X(qs[n-1]);
     }
 
 
@@ -101,13 +109,14 @@ namespace Quantum.QPEQFT {
     //
     // For example, for U = S the state (|00⟩ + |01⟩ + |10⟩ + |11⟩) ⊗ |1⟩ should be transformed into
     //      |00⟩ ⊗ |1⟩ + |10⟩ ⊗ S|1⟩ + |01⟩ ⊗ S²|1⟩ + |11⟩ ⊗ S³|1⟩ = (|00⟩ + i |10⟩ - |01⟩ - i|11⟩) ⊗ |1⟩.
-    operation Task5 (U : (Qubit => Unit is Adj+Ctl), 
-                     powerRegister : Qubit[], 
-                     target : Qubit) : Unit is Adj {
-        let n = Length(powerRegister);
-        for (i in 0 .. n - 1) {
-            if (BoolAsInt(powerRegister[i]) == 1) {
-                (U^IntAsDouble(i, n))(target);
+    operation Task5(U : (Qubit => Unit is Adj+Ctl), 
+                    powerRegister : Qubit[], 
+                    target : Qubit) : Unit is Adj {
+        for (i in 0..Length(powerRegister) - 1) {
+            // The ith qubit controls5 the application of U^(2^i) to the target.
+            for (j in 1..(1 <<< i)) {
+                // Apply Controlled U, using powerRegister[i] as the control.
+                Controlled U([powerRegister[i]], target);
             }
         }
     }
@@ -126,21 +135,7 @@ namespace Quantum.QPEQFT {
     //
     // The test will be executed 100 times for each value of φ.
     function Task6 (phase : Double) : ((Qubit => Unit is Adj+Ctl), (Qubit => Unit is Adj)) {
-        // The following code is a simple example of how to implement the task.
-        // You can use it as a starting point for your solution.
-        // The example implements the case when φ = 0.5.
-        // You need to implement a solution for an arbitrary φ.
-        // The example is not a valid solution for other values of φ.
-        // The example is not optimized for the minimal number of gates.
-        // The example is not tested for the precision requirements of the task.
-
-        // The unitary U is a rotation around the Z axis by 2πφ.
-        // The eigenstate |ψ⟩ is |+⟩ = (|0⟩ + |1⟩) / sqrt(2).
-        // The eigenvalue is exp(2πiφ).
-        // The phase gate P is the X gate.
-
-        // The example solution for φ = 0.5.
-        // return (R1(2.0 * PI() * phase), X);
-        return (R1(2.0 * PI() * phase), X);
+        // ...
+        return (I, I);
     }
 }
