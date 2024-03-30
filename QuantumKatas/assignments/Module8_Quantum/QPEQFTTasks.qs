@@ -38,8 +38,10 @@ namespace Quantum.QPEQFT {
     // For example, for n = 2 N = 4, and the goal state is 
     //       1/2 (|0⟩ + i|1⟩ - |2⟩ - i|3⟩).
     operation Task1 (qs : Qubit[]) : Unit is Adj {
-        // ...
+        let boolArr = IntAsBoolArray(1, Length(qs));
+        ApplyPauliFromBitString(PauliX, true, boolArr, qs);
     }
+
 
 
     // Task 2. Prepare superposition of odd states using QFT (1 point).
@@ -51,7 +53,11 @@ namespace Quantum.QPEQFT {
     // Note that this state is very easy to prepare directly; please don't do that followed by a call to Adjoint QFTLE, 
     // but think what state is converted into this state by QFT.
     operation Task2 (qs : Qubit[]) : Unit is Adj {
-        // ...
+        let arrLength = Length(qs);
+        let tail = arrLength - 1;
+        let q = qs[tail];
+        X(q);
+        H(q);
     }
 
 
@@ -62,7 +68,11 @@ namespace Quantum.QPEQFT {
     // For example, for n = 2 N = 4, and the goal state is 
     //       1/sqrt(2) (cos(0)|0⟩ + cos(π/2)|1⟩ + cos(π)|2⟩ + cos(3π/2)|3⟩) = 1/sqrt(2) (|0⟩ - |2⟩).
     operation Task3 (qs : Qubit[]) : Unit is Adj {
-        // ...
+        let n = Length(qs);
+        for i in 0..n - 1 {
+            H(qs[i]);
+        }
+        Z(qs[n - 1]);
     }
 
 
@@ -74,7 +84,11 @@ namespace Quantum.QPEQFT {
     //       The eigenstate |ψ₀⟩ (prepared for "state" = 0) should be the one with eigenvalue -1,
     //       |ψ₁⟩ (prepared for "state" = 1) - the one with eigenvalue 1.
     operation Task4 (q : Qubit, state : Int) : Unit is Adj {
-        // ...
+        if (state == 0) {
+            X(q); 
+        }
+        let theta = PI() / 4.0;
+        R(PauliY, theta, q);
     }
 
 
@@ -91,10 +105,16 @@ namespace Quantum.QPEQFT {
     //
     // For example, for U = S the state (|00⟩ + |01⟩ + |10⟩ + |11⟩) ⊗ |1⟩ should be transformed into
     //      |00⟩ ⊗ |1⟩ + |10⟩ ⊗ S|1⟩ + |01⟩ ⊗ S²|1⟩ + |11⟩ ⊗ S³|1⟩ = (|00⟩ + i |10⟩ - |01⟩ - i|11⟩) ⊗ |1⟩.
-    operation Task5 (U : (Qubit => Unit is Adj+Ctl), 
-                     powerRegister : Qubit[], 
-                     target : Qubit) : Unit is Adj {
-        // ...
+    operation Task5(U : (Qubit => Unit is Adj+Ctl), 
+                    powerRegister : Qubit[], 
+                    target : Qubit) : Unit is Adj {
+        let length = Length(powerRegister);
+        for i in 0..length - 1 {
+            let shifted = 1 <<< i;
+            for _ in 1..shifted {
+                Controlled U([powerRegister[i]], target);
+            }
+        }
     }
 
 
@@ -112,6 +132,6 @@ namespace Quantum.QPEQFT {
     // The test will be executed 100 times for each value of φ.
     function Task6 (phase : Double) : ((Qubit => Unit is Adj+Ctl), (Qubit => Unit is Adj)) {
         // ...
-        return (I, I);
+        return (I, I);  
     }
 }
