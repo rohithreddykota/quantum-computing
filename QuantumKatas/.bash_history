@@ -169,3 +169,8 @@ nohup jupyter notebook --ip=0.0.0.0 --no-browser > jupyter.out 2>&1 &
 tail -f jupyter.out 
 exit
 exit
+exit
+dotnet iqsharp --version
+dotnet tool install -g Microsoft.Quantum.IQSharp
+dotnet iqsharp install --user
+exit

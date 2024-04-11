@@ -41,6 +41,7 @@ pip install qsharp-jupyterlab
 ```bash
 dotnet iqsharp --version
 dotnet tool install -g Microsoft.Quantum.IQSharp
+dotnet add package Microsoft.Quantum.MachineLearning --version 0.28.302812
 dotnet iqsharp install --user
 ```
 

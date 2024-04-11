@@ -116,9 +116,11 @@ namespace Quantum.OracularAlgorithms {
     // You are not allowed to allocate extra qubits.
     operation Task5 (x : Qubit[]) : Unit is Adj + Ctl {
       let n = Length(x);
+      // 10101010...
       for i in 1 .. n - 1 {
          CNOT(x[i], x[i - 1]);
       }
+      // 01010101... and 10101010...
       Controlled Z(x[0 .. n - 3], x[n - 2]);
       for i in n - 1 .. -1 .. 1 {
          CNOT(x[i], x[i - 1]);
