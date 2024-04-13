@@ -30,14 +30,12 @@ namespace Microsoft.Quantum.Samples {
 
     function ClassifierStructure() : ControlledRotation[] {
         return [
-            ControlledRotation((0, new Int[0]), PauliX, 4),
-            ControlledRotation((0, new Int[0]), PauliZ, 5),
-            ControlledRotation((1, new Int[0]), PauliX, 6),
-            ControlledRotation((1, new Int[0]), PauliZ, 7),
-            ControlledRotation((0, [1]), PauliX, 0),
-            ControlledRotation((1, [0]), PauliX, 1),
-            ControlledRotation((1, new Int[0]), PauliZ, 2),
-            ControlledRotation((1, new Int[0]), PauliX, 3)
+            ControlledRotation((0, []), PauliZ, 1),
+            ControlledRotation((1, []), PauliX, 0),
+            ControlledRotation((0, [1]), PauliZ, 3),
+            ControlledRotation((2, []), PauliX, 2),
+            ControlledRotation((2, [1]), PauliZ, 5),
+            ControlledRotation((2, [0]), PauliZ, 4),
         ];
     }
 
