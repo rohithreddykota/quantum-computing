@@ -33,9 +33,9 @@ namespace Microsoft.Quantum.Samples {
             ControlledRotation((0, []), PauliZ, 1),
             ControlledRotation((1, []), PauliX, 0),
             ControlledRotation((0, [1]), PauliZ, 3),
-            ControlledRotation((2, []), PauliX, 2),
-            ControlledRotation((2, [1]), PauliZ, 5),
-            ControlledRotation((2, [0]), PauliZ, 4),
+            // ControlledRotation((2, []), PauliX, 2),
+            // ControlledRotation((2, [1]), PauliZ, 5),
+            // ControlledRotation((2, [0]), PauliZ, 4),
         ];
     }
 
@@ -67,11 +67,11 @@ namespace Microsoft.Quantum.Samples {
             mapped,
             samples,
             DefaultTrainingOptions()
-                w/ LearningRate <- 0.1
-                w/ MinibatchSize <- 2
+                w/ LearningRate <- 0.3
+                w/ MinibatchSize <- 1000
                 w/ Tolerance <- 0.005
-                w/ NMeasurements <- 5
-                w/ MaxEpochs <- 1
+                w/ NMeasurements <- 25
+                w/ MaxEpochs <- 4
                 w/ VerboseMessage <- Message,
             DefaultSchedule(trainingVectors),
             DefaultSchedule(trainingVectors)
