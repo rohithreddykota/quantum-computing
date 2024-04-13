@@ -51,11 +51,22 @@ namespace Microsoft.Quantum.Samples {
             Zipped(Preprocessed(trainingVectors), trainingLabels)
         );
         Message("Ready to train.");
-        let (optimizedModel, nMisses) = TrainSequentialClassifier(
-            Mapped(
+        let classifierStructure = ClassifierStructure();
+        // message length of classifierStructure is 8
+        Message($"Classifier structure length: {Length(classifierStructure)}");
+        let mapped = Mapped(
                 SequentialModel(ClassifierStructure(), _, 0.0),
                 initialParameters
-            ),
+            );
+        // message length of mapped is 4
+        Message($"Mapped length: {Length(mapped)}");
+        // print the first element of mapped
+        Message($"Mapped[0]: {mapped[0]}");
+        // message lenght samples is 100
+        Message($"Samples length: {Length(samples)}");
+        Message($"Mapped length: {Length(mapped)}");
+        let (optimizedModel, nMisses) = TrainSequentialClassifier(
+            mapped,
             samples,
             DefaultTrainingOptions()
                 w/ LearningRate <- 0.1
