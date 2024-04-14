@@ -41,7 +41,11 @@ namespace Quantum.Kata.GraphColoring {
     //       Use little-endian encoding (i.e., the least significant bit should be stored in the first qubit).
     // Example: for N = 2 and C = 2 the state should be |01⟩.
     operation InitializeColor (C : Int, register : Qubit[]) : Unit is Adj {
-        // ...
+        let N = Length(register);
+        // Convert C to an array of bits in little endian format
+        let binaryC = IntAsBoolArray(C, N);
+        // Value "true" corresponds to bit 1 and requires applying an X gate
+        ApplyPauliFromBitString(PauliX, true, binaryC, register);
     }
 
 
@@ -52,7 +56,7 @@ namespace Quantum.Kata.GraphColoring {
     // Example: for N = 2 and the qubits in the state |01⟩ return 2 (and keep the qubits in |01⟩).
     operation MeasureColor (register : Qubit[]) : Int {
         // ...
-        return -1;
+        return ResultArrayAsInt(MultiM(register));
     }
 
 
@@ -66,7 +70,9 @@ namespace Quantum.Kata.GraphColoring {
     // Example: for N = 2, K = 2 and the qubits in the state |0110⟩ return [2, 1].
     operation MeasureColoring (K : Int, register : Qubit[]) : Int[] {
         // ...
-        return [];
+        let N = Length(register) / K;
+        let colorPartitions = Chunks(N, register);
+        return ForEach(MeasureColor_Reference, colorPartitions);
     }
 
 
@@ -80,14 +86,25 @@ namespace Quantum.Kata.GraphColoring {
     //       Leave the query register in the same state it started in.
     // In this task you are allowed to allocate extra qubits.
     operation ColorEqualityOracle_2bit (c0 : Qubit[], c1 : Qubit[], target : Qubit) : Unit is Adj+Ctl {
-        // ...
+        for color in 0..3 {
+            let binaryColor = IntAsBoolArray(color, 2);
+            (ControlledOnBitString(binaryColor + binaryColor, X))(c0 + c1, target);
+        }
     }
 
 
     // Task 1.5. N-bit color equality oracle (no extra qubits)
     // This task is the same as task 1.4, but in this task you are NOT allowed to allocate extra qubits.
     operation ColorEqualityOracle_Nbit (c0 : Qubit[], c1 : Qubit[], target : Qubit) : Unit is Adj+Ctl {
-        // ...
+        within {
+            for (q0, q1) in Zipped(c0, c1) {
+                // compute XOR of q0 and q1 in place (storing it in q1)
+                CNOT(q0, q1);
+            }
+        } apply {
+            // if all XORs are 0, the bit strings are equal
+            (ControlledOnInt(0, X))(c1, target);
+        }
     }
 
 
