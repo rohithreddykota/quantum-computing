@@ -38,7 +38,8 @@ namespace Microsoft.Quantum.Samples {
     operation TrainModel(
         trainingVectors : Double[][],
         trainingLabels : Int[],
-        initialParameters : Double[][]
+        initialParameters : Double[][],
+        initialBias : Double
     ) : (Double[], Double) {
         let samples = Mapped(
             LabeledSample,
@@ -49,7 +50,7 @@ namespace Microsoft.Quantum.Samples {
         // message length of classifierStructure is 8
         Message($"Classifier structure length: {Length(classifierStructure)}");
         let mapped = Mapped(
-                SequentialModel(ClassifierStructure(), _, 0.0),
+                SequentialModel(ClassifierStructure(), _, initialBias),
                 initialParameters
             );
         Message($"Mapped length: {Length(mapped)}");
@@ -64,12 +65,12 @@ namespace Microsoft.Quantum.Samples {
                 w/ MinibatchSize <- 150
                 w/ Tolerance <- 0.005
                 w/ NMeasurements <- 10000
-                w/ MaxEpochs <- 16
+                w/ MaxEpochs <- 8
                 w/ VerboseMessage <- Message,
             SamplingSchedule([0..Length(trainingVectors) - 1]),
             SamplingSchedule([0..Length(trainingVectors) - 1]),
         );
-        Message($"Training complete, found optimal parameters: {optimizedModel::Parameters}");
+        Message($"Training complete!");
         return (optimizedModel::Parameters, optimizedModel::Bias);
     }
 
