@@ -41,6 +41,7 @@ pip install qsharp-jupyterlab
 ```bash
 dotnet iqsharp --version
 dotnet tool install -g Microsoft.Quantum.IQSharp
+dotnet tool install -g Microsoft.Quantum.MachineLearning
 dotnet add package Microsoft.Quantum.MachineLearning --version 0.28.302812
 dotnet iqsharp install --user
 ```
@@ -49,4 +50,14 @@ dotnet iqsharp install --user
 
 ```bash
 dotnet test --filter T1_Test
+```
+
+### Script
+
+```bash
+pip install traitlets==5.9.0
+pip install qsharp-jupyterlab
+dotnet tool install -g Microsoft.Quantum.IQSharp
+dotnet iqsharp install --user
+dotnet add package Microsoft.Quantum.MachineLearning --version 0.28.302812
 ```

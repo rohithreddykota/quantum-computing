@@ -174,3 +174,81 @@ dotnet iqsharp --version
 dotnet tool install -g Microsoft.Quantum.IQSharp
 dotnet iqsharp install --user
 exit
+cd Qu
+cd assignments/Module10_QML/machine-learning/wine/
+dotnet run
+cd ..
+dotnet run
+cd wine/
+dotnet run Host.cs 
+dotnet run 
+cd ..
+cd ..
+ls
+cd ..
+cd ..
+ls
+cd ..
+ls
+cd -
+ls
+cd Ka
+cd katas/
+ls
+ls
+cd ..
+ls
+cd tutorials/
+cd QuantumClassification/
+ls
+ls
+dotnet run
+cd ..
+cd ..
+cd assignments/Module10_QML/machine-learning/
+ls
+cd wine/
+ls
+cd ..
+cd half-moons
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+pip install qsharp
+pip install qsharp
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+dotnet run
+exit
+cd assignments/Module10_QML/
+ls
+cd machine-learning/
+ls
+cd car-evaluation/
+cd ..
+cd car-evaluation/
+nohup jupyter notebook --ip=0.0.0.0 --no-browser > jupyter.out 2>&1 &
+dotnet run
+cd ..
+cd half-moons-assign/
+dotnet run
+exit

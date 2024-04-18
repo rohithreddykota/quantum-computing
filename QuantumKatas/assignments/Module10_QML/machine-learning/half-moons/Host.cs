@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Samples
             };
 
             // Next, we initialize a full state-vector simulator as our target machine.
-            using var targetMachine = new QuantumSimulator();
+            using var targetMachine = new SparseSimulator();
 
             // Once we have the data loaded and have initialized our target machine,
             // we can then use that target machine to train a QCC classifier.
